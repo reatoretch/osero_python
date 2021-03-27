@@ -11,6 +11,9 @@ class GUI(wx.Frame):
  
     def OnPaint(self, event):
         dc = wx.PaintDC(self.panel)
+        dc.SetPen(wx.Pen('green'))
+        dc.SetBrush(wx.Brush("green"))
+        dc.DrawRectangle(50,20,160,160)
         dc.SetPen(wx.Pen('black'))
         for i in range(self.osero.game.H):
             for j in range(self.osero.game.W):

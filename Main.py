@@ -18,7 +18,7 @@ class Osero():
         if sum(availables[0].values())==sum(availables[1].values())==0:
             self.game.result()
             exit()
-        self.game.show()
+        #self.game.show()
         while True:
             if sum(availables[self.turn].values())==0:break
             x,y=self.players[self.turn].nextHand(self.turn,self.game.Field,availables[self.turn])

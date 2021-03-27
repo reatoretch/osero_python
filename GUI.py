@@ -8,26 +8,26 @@ class GUI(wx.Frame):
         self.panel = wx.Panel(self, size=(300, 200))
         self.panel.SetBackgroundColour('WHITE')
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Fit()
+        self.panel.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
         self.thread=threading.Thread()
         self.osero=Osero(players=[AI(hand=0),GUIPlayer(hand=1)])
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.OnTimer)
-        self.Bind(wx.EVT_LEFT_DOWN,self.OnClick)
-        self.timer.Start(1000) 
+        self.timer.Start(10) 
+        self.Fit()
     
     def OnTimer(self, event):
         if self.thread.is_alive()==False:
+            self.Refresh()
             self.thread=threading.Thread(target=self.osero.run)
-            self.thread.start()
-        self.Refresh()
+            self.thread.start()        
 
     def OnClick(self, event):
         pos = event.GetPosition()
         if isinstance(self.osero.players[self.osero.turn],GUIPlayer):
             x=(pos[0]-50)//20
             y=(pos[1]-20)//20
-            self.osero.players[self.osero.turn].setXY(x,y)
+            self.osero.players[self.osero.turn].setXY(x,y)         
  
     def OnPaint(self, event):
         dc = wx.PaintDC(self.panel)
@@ -51,7 +51,7 @@ class GUI(wx.Frame):
             dc.DrawLine(x, 20, x, 180)
  
 if __name__ == '__main__':
-    app = wx.PySimpleApp()
+    app = wx.App()
     w = GUI(title='wxgr-line')
     w.Center()
     w.Show()

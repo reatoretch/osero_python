@@ -52,7 +52,7 @@ class GUI(wx.Frame):
  
 if __name__ == '__main__':
     app = wx.App()
-    w = GUI(title='wxgr-line')
+    w = GUI(title='Osero')
     w.Center()
     w.Show()
     app.MainLoop()

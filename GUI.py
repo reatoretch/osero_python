@@ -8,6 +8,13 @@ class GUI(wx.Frame):
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Fit()
         self.osero=Osero()
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
+        self.timer.Start(1000) 
+    
+    def OnTimer(self, event):
+        self.osero.run()
+        self.Refresh()
  
     def OnPaint(self, event):
         dc = wx.PaintDC(self.panel)

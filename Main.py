@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import threading
 from Game import Game
 from Player import Player,AI
 class Osero():

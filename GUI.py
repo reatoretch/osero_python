@@ -1,5 +1,7 @@
 import wx
+import threading
 from Main import Osero
+from Player import AI,GUIPlayer
 class GUI(wx.Frame):
     def __init__(self, parent=None, id=-1, title=None):
         wx.Frame.__init__(self, parent, id, title)
@@ -7,14 +9,25 @@ class GUI(wx.Frame):
         self.panel.SetBackgroundColour('WHITE')
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Fit()
-        self.osero=Osero()
+        self.thread=threading.Thread()
+        self.osero=Osero(players=[AI(hand=0),GUIPlayer(hand=1)])
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.OnTimer)
+        self.Bind(wx.EVT_LEFT_DOWN,self.OnClick)
         self.timer.Start(1000) 
     
     def OnTimer(self, event):
-        self.osero.run()
+        if self.thread.is_alive()==False:
+            self.thread=threading.Thread(target=self.osero.run)
+            self.thread.start()
         self.Refresh()
+
+    def OnClick(self, event):
+        pos = event.GetPosition()
+        if isinstance(self.osero.players[self.osero.turn],GUIPlayer):
+            x=(pos[0]-50)//20
+            y=(pos[1]-20)//20
+            self.osero.players[self.osero.turn].setXY(x,y)
  
     def OnPaint(self, event):
         dc = wx.PaintDC(self.panel)

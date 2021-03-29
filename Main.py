@@ -17,6 +17,7 @@ class Osero():
                 availables[1].update(self.game.isPutOK(j,i,1))
         if sum(availables[0].values())==sum(availables[1].values())==0:
             self.game.result()
+            self.game.gameEndFlag=1
             exit()
         #self.game.show()
         while True:

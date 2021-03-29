@@ -17,7 +17,9 @@ class GUI(wx.Frame):
         self.Fit()
     
     def OnTimer(self, event):
-        if self.thread.is_alive()==False:
+        if self.osero.game.gameEndFlag==1:
+            pass
+        elif self.thread.is_alive()==False:
             self.Refresh()
             self.thread=threading.Thread(target=self.osero.run)
             self.thread.start()        

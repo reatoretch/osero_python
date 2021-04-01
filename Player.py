@@ -5,12 +5,14 @@ class Player():
         x,y=map(int,input().split())
         return x,y
 
+import re
 import random
 class AI():
     def __init__(self,hand):
         self.hand=hand
     def nextHand(self,osero):
-        x,y=random.randint(0,osero.game.H-1),random.randint(0,osero.game.H-1)
+        s=random.sample(osero.availables[osero.turn].keys(),1)
+        x,y=map(int,str(re.sub(r"(\[|\])","",s[0])).split(","))
         return x,y
 
 import time
@@ -30,8 +32,9 @@ class GUIPlayer():
             if self.x==self.y==-1:continue
             if osero.availables[osero.turn][f"[{self.x},{self.y}]"]:return self.x,self.y
 
+import copy
 from Game import Game
-class AI_minmax():
+class AI_monte():
     def __init__(self,hand):
         self.hand=hand
     def nextHand(self,osero):

@@ -9,6 +9,7 @@ class Osero():
     def __init__(self,players=[AI(hand=0),AI(hand=1)]):
         self.players=players
         self.game=Game()
+        self.cnt=[]
         self.turn=0
     def run(self):
         self.availables=[{},{}]
@@ -17,8 +18,9 @@ class Osero():
                 self.availables[0].update(self.game.isPutOK(j,i,0))
                 self.availables[1].update(self.game.isPutOK(j,i,1))
         if sum(self.availables[0].values())==sum(self.availables[1].values())==0:
-            self.game.result()
+            self.cnt=self.game.result(self.turn)
             self.game.gameEndFlag=1
+            print(f"\n-result-\nYou:{self.cnt[self.turn]}\nEnemy:{self.cnt[(self.turn+1)%2]}")
             exit()
         #self.game.show()
         while True:

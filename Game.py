@@ -64,13 +64,20 @@ class Game():
                     break
                 ty+=ny;tx+=nx
 
-    def result(self):
-        cnt0=0
-        cnt1=0
+    def result(self,turn):
+        cnt=[0,0]
+        enemy_stone=turn
+        me_stone=(turn+1)%2
         for i in range(self.H):
             for j in range(self.W):
-                if self.Field[i][j]==0:
-                    cnt0+=1
-                elif self.Field[i][j]==1:
-                    cnt1+=1
-        print(f"\n-result-\nuser1:{cnt0}\nuser2:{cnt1}")
+                if self.Field[i][j]==me_stone:
+                    cnt[turn]+=1
+                elif self.Field[i][j]==enemy_stone:
+                    cnt[(turn+1)%2]+=1
+        if cnt[turn]>cnt[(turn+1)%2]:
+            print("Win!!")
+        elif cnt[turn]==cnt[(turn+1)%2]:
+            print("Draw Game")
+        else:
+            print("Lose...")
+        return cnt

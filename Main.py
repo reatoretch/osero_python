@@ -15,18 +15,19 @@ class Osero():
         self.availables=[{},{}]
         for i in range(self.game.H):
             for j in range(self.game.W):
-                self.availables[0].update(self.game.isPutOK(j,i,0))
-                self.availables[1].update(self.game.isPutOK(j,i,1))
-        if sum(self.availables[0].values())==sum(self.availables[1].values())==0:
-            self.cnt=self.game.result(self.turn)
+                self.availables[self.game.BLACK].update(self.game.isPutOK(j,i,self.game.BLACK))
+                self.availables[self.game.WHITE].update(self.game.isPutOK(j,i,self.game.WHITE))
+        if sum(self.availables[self.game.BLACK].values())==sum(self.availables[self.game.WHITE].values())==0:
+            self.cnt=self.game.result()
             self.game.gameEndFlag=1
-            print(f"\n-result-\nYou:{self.cnt[self.turn]}\nEnemy:{self.cnt[(self.turn+1)%2]}")
-            exit()
+            if self.game.consoleFlag:
+                print(f"Black:{self.cnt[self.game.BLACK]}\nWhite:{self.cnt[self.game.WHITE]}")
+            return self.game.gameEndFlag
         #self.game.show()
         while True:
             if sum(self.availables[self.turn].values())==0:break
             x,y=self.players[self.turn].nextHand(copy.deepcopy(self))
-            if self.availables[self.turn][f"[{x},{y}]"]:
+            if self.availables[self.turn][(x,y)]:
                 self.game.update(x,y,self.turn)
                 break
             else:

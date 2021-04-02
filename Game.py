@@ -3,11 +3,14 @@ import sys
 X=[1,1,0,-1,-1,-1,0,1]
 Y=[0,-1,-1,-1,0,1,1,1]
 class Game():
-    def __init__(self,N=8):
+    def __init__(self,N=8,consoleFlag=1):
         if N%2:print("No!!",file=sys.stderr);exit()
         self.H=N
         self.W=N
+        self.BLACK=0
+        self.WHITE=1
         self.gameEndFlag=0
+        self.consoleFlag=consoleFlag
         self.winner=""
         self.Field=[[-1]*self.W for i in range(self.H)]
         self.Field[self.H//2][self.W//2]=1
@@ -22,26 +25,26 @@ class Game():
         os.system("cls")
         for i in range(self.H):
             for j in range(self.W):
-                if self.Field[i][j]==0:
-                    print(end="o")
-                elif self.Field[i][j]==1:
+                if self.Field[i][j]==self.BLACK:
                     print(end="x")
+                elif self.Field[i][j]==self.WHITE:
+                    print(end="o")
                 else:
                     print(end=".")
             print()
     
     def isPutOK(self,x,y,hand):
-        d={f"[{x},{y}]":False}
+        d={}
         if self.Field[y][x]==-1:
             for nx,ny in zip(X,Y):
                 tx,ty=x,y
                 cnt=0
-                if d[f"[{x},{y}]"]:break
+                if (x,y) in d:break
                 while 0<=tx+nx<self.W and 0<=ty+ny<self.H:
                     if self.Field[ty+ny][tx+nx]!=-1 and self.Field[ty+ny][tx+nx]!=hand:
                         cnt+=1
                     elif self.Field[ty+ny][tx+nx]==hand and cnt>0:
-                        d[f"[{x},{y}]"]=True
+                        d[(x,y)]=True
                         break
                     else:
                         break
@@ -64,20 +67,19 @@ class Game():
                     break
                 ty+=ny;tx+=nx
 
-    def result(self,turn):
+    def result(self):
         cnt=[0,0]
-        enemy_stone=turn
-        me_stone=(turn+1)%2
         for i in range(self.H):
             for j in range(self.W):
-                if self.Field[i][j]==me_stone:
-                    cnt[turn]+=1
-                elif self.Field[i][j]==enemy_stone:
-                    cnt[(turn+1)%2]+=1
-        if cnt[turn]>cnt[(turn+1)%2]:
-            print("Win!!")
-        elif cnt[turn]==cnt[(turn+1)%2]:
-            print("Draw Game")
-        else:
-            print("Lose...")
+                if self.Field[i][j]==self.WHITE:
+                    cnt[self.WHITE]+=1
+                elif self.Field[i][j]==self.BLACK:
+                    cnt[self.BLACK]+=1
+        if self.consoleFlag:
+            if cnt[self.BLACK]>cnt[self.WHITE]:
+                print("Black!!")
+            elif cnt[self.BLACK]==cnt[self.WHITE]:
+                print("Draw Game")
+            else:
+                print("White!!")
         return cnt
